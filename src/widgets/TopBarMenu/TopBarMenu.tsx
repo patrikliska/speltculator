@@ -12,7 +12,8 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
-import { pages } from '../../types';
+import { pages } from '../../constants';
+import { useLocation } from 'react-router-dom';
 
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
@@ -22,6 +23,13 @@ export const TopBarMenu = () => {
   );
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
+  );
+
+  const currentLocation = useLocation();
+
+  const decodedPathname = decodeURIComponent(currentLocation.pathname).replace(
+    /\//g,
+    ''
   );
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -57,7 +65,7 @@ export const TopBarMenu = () => {
               textDecoration: 'none',
             }}
           >
-            LOGO
+            HOME
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
@@ -87,9 +95,13 @@ export const TopBarMenu = () => {
                 display: { xs: 'block', md: 'none' },
               }}
             >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign='center'>{page}</Typography>
+              {pages.map(({ title, disabled }) => (
+                <MenuItem
+                  key={title}
+                  disabled={disabled}
+                  onClick={handleCloseNavMenu}
+                >
+                  <Typography textAlign='center'>{title}</Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -110,18 +122,28 @@ export const TopBarMenu = () => {
               textDecoration: 'none',
             }}
           >
-            LOGO
+            HOME
           </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map((page) => (
+          <Box
+            sx={{
+              flexGrow: 1,
+              display: { xs: 'none', md: 'flex' },
+              '& > .MuiButton-root:not(:first-child)': {
+                ml: 2,
+              },
+            }}
+          >
+            {pages.map(({ title, disabled }) => (
               <Button
-                key={page}
+                key={title}
                 onClick={handleCloseNavMenu}
                 sx={{ my: 2, display: 'block' }}
                 size='large'
-                href={page}
+                href={title}
+                disabled={disabled}
+                variant={decodedPathname === title ? 'contained' : 'text'}
               >
-                {page}
+                {title}
               </Button>
             ))}
           </Box>
