@@ -1,8 +1,8 @@
 import { createTheme } from '@mui/material';
-import { createBrowserRouter } from 'react-router-dom';
+import { RouteObject } from 'react-router-dom';
 
 import { Pages } from './types';
-import { ZvzSsLogger } from './screens';
+import { MarketPrices, ZvzSsLogger } from './screens';
 
 export const defaultTheme = createTheme({
   palette: {
@@ -23,7 +23,15 @@ export const defaultTheme = createTheme({
   },
 });
 
-export const topBarRouter = createBrowserRouter([
+export const pages = [
+  { title: Pages.Prices },
+  { title: Pages.GuildBuyOrders, disabled: true },
+  { title: Pages.ZvzMagazine, disabled: true },
+  { title: Pages.ZvzSsLogger, disabled: true },
+  { title: Pages.GuildActivity, disabled: true },
+];
+
+export const menuPages: RouteObject[] = [
   {
     path: '/',
     element: <div>Home</div>,
@@ -34,7 +42,7 @@ export const topBarRouter = createBrowserRouter([
   },
   {
     path: Pages.Prices,
-    element: <div>Prices</div>,
+    element: <MarketPrices />,
   },
   {
     path: Pages.ZvzSsLogger,
@@ -44,4 +52,8 @@ export const topBarRouter = createBrowserRouter([
     path: Pages.GuildBuyOrders,
     element: <div>Calc</div>,
   },
-]);
+  {
+    path: Pages.GuildActivity,
+    element: <div>Guild activity</div>,
+  },
+];

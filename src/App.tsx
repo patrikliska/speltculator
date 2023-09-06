@@ -1,20 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
-import { Box, Button, Container } from '@mui/material';
+import { Box, Button, Container, Stack } from '@mui/material';
 
 import aoData from './aoData/items.json';
 import weaponsJson from './aoData/weapons.json';
 
 import { allItemsList } from './aoData/constants';
 import { TopBarMenu } from './widgets';
-import { RouterProvider, createBrowserRouter } from 'react-router-dom';
-import { topBarRouter } from './constants';
+import {
+  RouterProvider,
+  createBrowserRouter,
+  useRoutes,
+} from 'react-router-dom';
+import { menuPages } from './constants';
 
 export const App = () => {
   const [onlyNamesAndIds, setOnlyNamesAndIds] = useState<string[]>([]);
   const [weapons, setWeapons] = useState<{ name: string; label: string }[]>([]);
   // console.log('aoData', aoData);
+  const routes = useRoutes(menuPages);
 
   useEffect(() => {
     const onlyName: string[] = [];
@@ -120,18 +125,22 @@ export const App = () => {
       });
   }, []);
 
+  const elHeight = document.getElementsByClassName('MuiAppBar-root')[0];
+
+  console.log('elHeight', elHeight?.clientHeight);
+
   return (
     <>
       <TopBarMenu />
       <Box
         sx={{
           p: 2,
-          minHeight: 'calc(100vh - 64px)',
+          minHeight: `calc(100vh - ${elHeight?.clientHeight || 0}px)`,
           display: 'flex',
           position: 'relative',
         }}
       >
-        <RouterProvider router={topBarRouter} />
+        <Stack width='100%'>{routes}</Stack>
       </Box>
       {/* <div className='App'>
         <header className='App-header'>

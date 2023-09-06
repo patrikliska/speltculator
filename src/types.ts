@@ -3,6 +3,5 @@ export enum Pages {
   Prices = 'Market Prices',
   ZvzSsLogger = 'ZvZ & SS Logger',
   GuildBuyOrders = 'Guild - buy orders',
+  GuildActivity = 'Guild activity',
 }
-
-export const pages = Object.values(Pages);
