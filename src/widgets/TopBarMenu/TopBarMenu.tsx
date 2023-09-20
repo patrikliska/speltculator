@@ -14,6 +14,7 @@ import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import { pages } from '../../constants';
 import { useLocation } from 'react-router-dom';
+import { homeTitleSx } from './styles';
 
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
@@ -56,14 +57,7 @@ export const TopBarMenu = () => {
             noWrap
             component='a'
             href='/'
-            sx={{
-              mr: 2,
-              display: { xs: 'none', md: 'flex' },
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              textDecoration: 'none',
-            }}
+            sx={homeTitleSx}
           >
             HOME
           </Typography>
@@ -128,7 +122,7 @@ export const TopBarMenu = () => {
             sx={{
               flexGrow: 1,
               display: { xs: 'none', md: 'flex' },
-              '& > .MuiButton-root:not(:first-child)': {
+              '& > .MuiButton-root:not(:first-of-type)': {
                 ml: 2,
               },
             }}

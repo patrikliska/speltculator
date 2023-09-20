@@ -57,3 +57,12 @@ export const menuPages: RouteObject[] = [
     element: <div>Guild activity</div>,
   },
 ];
+
+export const cityColors: Record<string, string> = {
+  bridgewatch: '#f76397',
+  caerleon: '#343a40',
+  fortsterling: '#00b19d',
+  lymhurst: '#ffaa00',
+  martlock: '#7266ba',
+  thetford: '#3bafda',
+};
