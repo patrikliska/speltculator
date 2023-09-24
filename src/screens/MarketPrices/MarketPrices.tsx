@@ -1,12 +1,13 @@
-import { SyntheticEvent, useEffect, useState } from 'react';
-import { Box, Autocomplete, TextField, Paper, Typography, AutocompleteChangeDetails, AutocompleteChangeReason, Tooltip, Grid } from '@mui/material';
+import { SyntheticEvent, useCallback, useMemo, useState } from 'react';
+import { Box, Autocomplete, TextField, Paper, Typography, AutocompleteChangeDetails, AutocompleteChangeReason, Tooltip, Grid, Divider } from '@mui/material';
+import { useRecoilValue } from 'recoil';
 
 import weaponsList from '../../aoData/weapons.json';
 import { cityColors } from '../../constants';
 
 import { ItemQualityPicker, ItemTierPicker } from './components';
-import { itemTiersAtom } from './atoms';
-import { useRecoilValue } from 'recoil';
+import { itemQualityAtom, itemTiersAtom } from './atoms';
+import { Quality } from './types';
 
 interface Item {
   name: string;
@@ -34,8 +35,17 @@ interface SelectedItem extends Item {
   prices: ItemPriceInformation[];
 }
 
+const qualityId = {
+  Normal: Quality.Normal,
+  Good: Quality.Good,
+  Outstanding: Quality.Outstanding,
+  Excelent: Quality.Excelent,
+  Masterpiece: Quality.Masterpiece,
+};
+
 export const MarketPrices = () => {
   const selectedItemTiers = useRecoilValue(itemTiersAtom);
+  const selectedItemQuality = useRecoilValue(itemQualityAtom);
 
   const [selectedItems, setSelectedItems] = useState<SelectedItem[]>([]);
 
@@ -46,32 +56,84 @@ export const MarketPrices = () => {
     else return 'UnknownTier';
   };
 
-  const handleSelectedItemsChange = async (
-    event: SyntheticEvent<Element, Event>,
-    newItems: Item[],
-    reason: AutocompleteChangeReason,
-    details?: AutocompleteChangeDetails<Item>
-  ) => {
-    if (!details) return;
+  const handleSelectedItemsChange = useCallback(
+    async (event: SyntheticEvent<Element, Event>, newItems: Item[], reason: AutocompleteChangeReason, details?: AutocompleteChangeDetails<Item>) => {
+      if (!details) return;
 
-    const { option } = details;
+      const { option } = details;
 
-    if (reason === 'removeOption') return setSelectedItems((currentlySelectedItems) => currentlySelectedItems.filter(({ name }) => name !== option.name));
+      if (reason === 'removeOption') return setSelectedItems((currentlySelectedItems) => currentlySelectedItems.filter(({ name }) => name !== option.name));
 
-    const itemPrices: ItemPriceInformation[] = await fetch(
-      `https://west.albion-online-data.com/api/v2/stats/prices/${option.name}?locations=Caerleon,Lymhurst,Martlock,Bridgewatch,Thetford,FortSterling&qualities=1`
-    ).then((response) => response.json());
+      const itemPrices: ItemPriceInformation[] = await fetch(
+        `https://west.albion-online-data.com/api/v2/stats/prices/${option.name}?locations=Caerleon,Lymhurst,Martlock,Bridgewatch,Thetford,FortSterling`
+      ).then((response) => response.json());
 
-    const newlySelectedItem: SelectedItem = { ...option, prices: itemPrices };
+      console.log('itemPrices', itemPrices);
 
-    console.log('newlySelectedItem', newlySelectedItem);
+      const newlySelectedItem: SelectedItem = { ...option, prices: itemPrices };
 
-    setSelectedItems((currentlySelectedItems) => [...currentlySelectedItems, newlySelectedItem]);
-  };
+      setSelectedItems((currentlySelectedItems) => [...currentlySelectedItems, newlySelectedItem]);
+    },
+    []
+  );
 
-  useEffect(() => {
-    console.log('selectedItems', selectedItems);
-  }, [selectedItems]);
+  const memoizedSelectedItems = useMemo(
+    () =>
+      selectedItems.map(({ name, label, prices }, index) => (
+        <>
+          <Grid container justifyContent='center'>
+            {selectedItemTiers.map((tier) => (
+              <Paper key={`${name}@${tier}-${index}`} sx={{ width: 400, p: 2, display: 'flex', m: 2 }}>
+                <img alt={label} style={{ width: 64, height: 64 }} src={`https://render.albiononline.com/v1/item/${name}@${tier}.png`} />
+                <Box
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    p: ({ spacing }) => spacing(0.5, 0, 1, 0),
+                  }}
+                >
+                  <>
+                    <Typography typography='h5'>
+                      {label} ({getItemTier(name)}.{tier})
+                    </Typography>
+                    <Box display='flex'>
+                      {prices.map(({ sell_price_min, city, quality }, priceIndex) => {
+                        const cityName = city.replace(/\s/g, '').toLowerCase();
+
+                        if (quality !== Number(qualityId[selectedItemQuality])) return <></>;
+
+                        return (
+                          <Tooltip key={`priceof-${name}-${priceIndex}`} title={city}>
+                            <Typography
+                              variant='h6'
+                              sx={{
+                                '&:not(:first-of-type)': {
+                                  ml: 0.5,
+                                },
+                                cursor: 'pointer',
+                                borderRadius: 0.5,
+                                padding: ({ spacing }) => spacing(0, 0.75),
+                                bgcolor: cityColors[cityName] ?? '#ffffff',
+                                color: '#ffffff',
+                              }}
+                            >
+                              {sell_price_min.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')}
+                            </Typography>
+                          </Tooltip>
+                        );
+                      })}
+                    </Box>
+                  </>
+                </Box>
+              </Paper>
+            ))}
+          </Grid>
+          {selectedItems[index + 1] ? <Divider variant='fullWidth' sx={{ m: 1 }} /> : undefined}
+        </>
+      )),
+    [selectedItemQuality, selectedItems, selectedItemTiers]
+  );
 
   return (
     <>
@@ -91,54 +153,7 @@ export const MarketPrices = () => {
           <ItemQualityPicker />
         </Box>
       </Grid>
-      <Grid container justifyContent='center'>
-        {selectedItems.map(({ name, label, prices }, index) =>
-          selectedItemTiers.map((tier) => (
-            <Paper key={`${name}-${index}`} sx={{ width: 400, p: 2, display: 'flex', m: 2 }}>
-              <img alt={label} style={{ width: 64, height: 64 }} src={`https://render.albiononline.com/v1/item/${name}@${tier}.png`} />
-              <Box
-                sx={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'space-between',
-                  p: ({ spacing }) => spacing(0.5, 0, 1, 0),
-                }}
-              >
-                <>
-                  <Typography typography='h5'>
-                    {label} ({getItemTier(name)}.{tier})
-                  </Typography>
-                  <Box display='flex'>
-                    {prices.map(({ sell_price_min, city }, priceIndex) => {
-                      const cityName = city.replace(/\s/g, '').toLowerCase();
-
-                      return (
-                        <Tooltip key={`priceof-${name}-${priceIndex}`} title={city}>
-                          <Typography
-                            variant='h6'
-                            sx={{
-                              '&:not(:first-of-type)': {
-                                ml: 0.5,
-                              },
-                              cursor: 'pointer',
-                              borderRadius: 0.5,
-                              padding: ({ spacing }) => spacing(0, 0.75),
-                              bgcolor: cityColors[cityName] ?? '#ffffff',
-                              color: '#ffffff',
-                            }}
-                          >
-                            {sell_price_min.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')}
-                          </Typography>
-                        </Tooltip>
-                      );
-                    })}
-                  </Box>
-                </>
-              </Box>
-            </Paper>
-          ))
-        )}
-      </Grid>
+      {memoizedSelectedItems}
     </>
   );
 };
