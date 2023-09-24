@@ -1,7 +1,10 @@
 import { atom } from 'recoil';
 
-export const itemQualityAtom = atom<string>({
-  default: '',
+import { qualities } from './constants';
+import { QualityName } from './types';
+
+export const itemQualityAtom = atom<QualityName>({
+  default: qualities[0],
   key: 'ItemQuality',
 });
 
