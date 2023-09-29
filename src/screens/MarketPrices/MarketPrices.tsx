@@ -19,9 +19,21 @@ export const MarketPrices = () => {
 
       if (reason === 'removeOption') return setSelectedItems((currentlySelectedItems) => currentlySelectedItems.filter(({ name }) => name !== option.name));
 
-      const itemPrices: ItemPriceInformation[] = await fetch(
-        `https://west.albion-online-data.com/api/v2/stats/prices/${option.name}?locations=Caerleon,Lymhurst,Martlock,Bridgewatch,Thetford,FortSterling`
-      ).then((response) => response.json());
+      // const todaysDate = new Date();
+      // const previousDayDate = new Date();
+
+      // previousDayDate.setDate(todaysDate.getDate() - 2);
+
+      // const todaysDateFormatted = `${todaysDate.getMonth() + 1}-${todaysDate.getDate()}-${todaysDate.getFullYear()}`;
+      // const previousDayDateFormatted = `${previousDayDate.getMonth() + 1}-${previousDayDate.getDate()}-${previousDayDate.getFullYear()}`;
+
+      // const priceFetchUrl = `https://west.albion-online-data.com/api/v2/stats/history/${option.name}?locations=Caerleon,Lymhurst,Martlock,Bridgewatch,Thetford,FortSterling&date=${previousDayDateFormatted}&end_date=${todaysDateFormatted}&time-scale=1`;
+      const priceFetchUrl = `https://west.albion-online-data.com/api/v2/stats/prices/${option.name}?locations=Caerleon,Lymhurst,Martlock,Bridgewatch,Thetford,FortSterling`;
+
+      const itemPrices: ItemPriceInformation[] = await fetch(priceFetchUrl).then((response) => response.json());
+
+      console.log('itemPrices', itemPrices);
+      console.log('priceFetchUrl', priceFetchUrl);
 
       const newlySelectedItem: SelectedItem = { ...option, prices: itemPrices };
 
