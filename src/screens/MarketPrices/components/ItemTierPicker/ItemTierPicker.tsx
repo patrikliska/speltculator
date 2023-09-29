@@ -1,15 +1,16 @@
-import { Box, Button, FormControlLabel, Checkbox, FormLabel } from '@mui/material';
+import { Box, Button, FormControlLabel, Checkbox, FormLabel, Typography } from '@mui/material';
 import { useRecoilState } from 'recoil';
 import { useCallback } from 'react';
 
 import { itemTiersAtom } from '../../atoms';
 import { itemTiers } from '../../constants';
+import { ItemTier } from '../../types';
 
 export const ItemTierPicker = () => {
   const [selectedItemTiers, setSelectedItemTiers] = useRecoilState(itemTiersAtom);
 
   const handleSelectedItemTiers = useCallback(
-    (itemTier: number) => {
+    (itemTier: ItemTier) => {
       setSelectedItemTiers((currentlySelectedItemTiers) => {
         if (currentlySelectedItemTiers.includes(itemTier)) {
           if (currentlySelectedItemTiers.length === 1) return currentlySelectedItemTiers;
@@ -32,7 +33,9 @@ export const ItemTierPicker = () => {
   return (
     <Box width='fit-content'>
       <Box display='flex' justifyContent='space-between' alignItems='center'>
-        <FormLabel sx={{ m: 0 }}>Tier</FormLabel>
+        <FormLabel sx={{ m: 0 }}>
+          <Typography variant='body2'>Tier</Typography>
+        </FormLabel>
         <Box>
           <Button variant='text' size='small' onClick={() => setSelectedItemTiers(itemTiers)}>
             Select all
@@ -46,7 +49,7 @@ export const ItemTierPicker = () => {
         {itemTiers.map((itemTier, index) => (
           <FormControlLabel
             key={`${itemTier}-${index}`}
-            control={<Checkbox checked={selectedItemTiers.includes(itemTier)} onClick={() => handleSelectedItemTiers(itemTier)} />}
+            control={<Checkbox checked={selectedItemTiers.includes(itemTier)} onClick={() => handleSelectedItemTiers(itemTier)} size='small' />}
             label={`T .${itemTier}`}
           />
         ))}

@@ -14,6 +14,8 @@ export interface Item {
   enchantments: string[];
 }
 
+export type ItemTier = 0 | 1 | 2 | 3 | 4;
+
 export type City = 'Bridgewatch' | 'Thetford' | 'Lymhurst' | 'Carleon' | 'Fort Sterling';
 
 export interface ItemPriceInformation {

@@ -9,9 +9,9 @@ import { RecoilRoot } from 'recoil';
 import { App } from './App';
 import { defaultTheme } from './constants';
 
-const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
-);
+import './styles.css';
+
+const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
 root.render(
   <React.StrictMode>

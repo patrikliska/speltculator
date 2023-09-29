@@ -1,4 +1,4 @@
-import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from '@mui/material';
+import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Typography } from '@mui/material';
 import { useRecoilState } from 'recoil';
 
 import { itemQualityAtom } from '../../atoms';
@@ -12,10 +12,12 @@ export const ItemQualityPicker = () => {
 
   return (
     <FormControl>
-      <FormLabel>Quality</FormLabel>
+      <FormLabel>
+        <Typography variant='body2'>Quality</Typography>
+      </FormLabel>
       <RadioGroup name='Quality' value={selectedItemQuality} onChange={handleChange} sx={{ display: 'flex', flexDirection: 'row' }}>
         {qualities.map((tier, index) => (
-          <FormControlLabel key={`${tier}-${index}`} value={tier} control={<Radio />} label={tier} />
+          <FormControlLabel key={`${tier}-${index}`} value={tier} control={<Radio size='small' />} label={tier} />
         ))}
       </RadioGroup>
     </FormControl>

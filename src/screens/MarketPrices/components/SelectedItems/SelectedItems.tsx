@@ -38,7 +38,7 @@ export const SelectedItems = () => {
         <img alt={label} style={imageStyles} src={`https://render.albiononline.com/v1/item/${name}@${tier}.png`} />
         <Box sx={itemContentSx}>
           <>
-            <Typography typography='h5'>
+            <Typography typography='subtitle1'>
               {label} ({getItemTier(name)}.{tier})
             </Typography>
             <Box display='flex'>
@@ -50,7 +50,7 @@ export const SelectedItems = () => {
                 return (
                   <Tooltip key={`priceof-${name}-${priceIndex}`} title={city}>
                     <Typography
-                      variant='h6'
+                      variant='body2'
                       sx={{
                         '&:not(:first-of-type)': {
                           ml: 0.5,
