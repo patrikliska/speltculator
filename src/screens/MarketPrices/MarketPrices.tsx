@@ -2,7 +2,7 @@ import { SyntheticEvent, useCallback } from 'react';
 import { Box, Autocomplete, TextField, AutocompleteChangeDetails, AutocompleteChangeReason, Grid } from '@mui/material';
 import { useSetRecoilState } from 'recoil';
 
-import weaponsList from '../../aoData/weapons.json';
+import { weaponsJson } from '../../constants';
 
 import { ItemQualityPicker, ItemTierPicker, SelectedItems } from './components';
 import { selectedMarketItemsAtom } from './atoms';
@@ -23,8 +23,6 @@ export const MarketPrices = () => {
         `https://west.albion-online-data.com/api/v2/stats/prices/${option.name}?locations=Caerleon,Lymhurst,Martlock,Bridgewatch,Thetford,FortSterling`
       ).then((response) => response.json());
 
-      console.log('itemPrices', itemPrices);
-
       const newlySelectedItem: SelectedItem = { ...option, prices: itemPrices };
 
       setSelectedItems((currentlySelectedItems) => [...currentlySelectedItems, newlySelectedItem]);
@@ -38,12 +36,12 @@ export const MarketPrices = () => {
         <Autocomplete
           sx={{ width: '500px' }}
           multiple
-          id='tags-standard'
-          options={weaponsList}
+          options={weaponsJson}
           getOptionLabel={(option) => option.label}
           fullWidth
           onChange={handleSelectedItemsChange}
-          renderInput={(params) => <TextField {...params} variant='standard' label='Find your Item' placeholder={weaponsList[0].label} />}
+          renderInput={(params) => <TextField {...params} variant='standard' label='Find your Item' placeholder={weaponsJson[0].label} />}
+          ChipProps={{ size: 'small' }}
         />
         <Box>
           <ItemTierPicker />

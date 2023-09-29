@@ -12,7 +12,7 @@ export const itemContentSx: BoxProps['sx'] = {
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'space-between',
-  p: ({ spacing }) => spacing(0.5, 0, 1, 0),
+  pb: 1,
 };
 
 export const imageStyles = { width: 64, height: 64 };
