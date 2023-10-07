@@ -1,7 +1,17 @@
 import { BoxProps, PaperProps } from '@mui/material';
 
 export const getItemContainerSx = (isFirstItem: boolean): PaperProps['sx'] => {
-  const itemContainerSx: PaperProps['sx'] = { display: 'flex', flexDirection: 'column', gap: 1, width: 400, p: 2, zIndex: 1, position: 'relative' };
+  const itemContainerSx: PaperProps['sx'] = {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 1,
+    maxWidth: 500,
+    minWidth: 400,
+    overflow: 'hidden',
+    p: 2,
+    position: 'relative',
+    zIndex: 1,
+  };
 
   if (!isFirstItem) Object.assign(itemContainerSx, { transform: 'scale(0.95)', mt: -3, zIndex: 0, pt: 3.5 });
 
