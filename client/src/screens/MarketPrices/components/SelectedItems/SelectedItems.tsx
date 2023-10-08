@@ -36,7 +36,7 @@ export const SelectedItems = () => {
   const ItemPrice = useCallback(
     ({ name, prices }: { name: string; prices: ItemPriceInformation[] }) => {
       return (
-        <Box display='flex'>
+        <Grid container display='flex' gap={0.5} justifyContent='center'>
           {prices.map(({ sell_price_min, city, quality }, priceIndex) => {
             const cityName = city.replace(/\s/g, '').toLowerCase();
 
@@ -45,13 +45,10 @@ export const SelectedItems = () => {
             if (!allowItemQuality && quality > 0) return undefined;
 
             return (
-              <Tooltip key={`priceof-${name}-${priceIndex}`} title={city}>
+              <Tooltip key={`priceof-${name}-${priceIndex}`} title={city} arrow>
                 <Typography
                   variant='body2'
                   sx={{
-                    '&:not(:first-of-type)': {
-                      ml: 0.5,
-                    },
                     cursor: 'pointer',
                     borderRadius: 0.5,
                     padding: ({ spacing }) => spacing(0, 0.75),
@@ -65,7 +62,7 @@ export const SelectedItems = () => {
               </Tooltip>
             );
           })}
-        </Box>
+        </Grid>
       );
     },
     [allowItemQuality, selectedItemQuality]

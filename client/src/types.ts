@@ -1,7 +1,8 @@
 export enum Pages {
-  ZvzMagazine = 'ZvZ Magazine',
-  Prices = 'Market Prices',
-  ZvzSsLogger = 'ZvZ & SS Logger',
-  GuildBuyOrders = 'Guild - buy orders',
-  GuildActivity = 'Guild activity',
+  ZvzMagazine = 'ZvZMagazine',
+  Prices = 'MarketPrices',
+  ZvzSsLogger = 'ZvZSSLogger',
+  GuildBuyOrders = 'Guildbuy orders',
+  GuildActivity = 'Guildactivity',
+  Crafting = 'CraftingCalculator',
 }
