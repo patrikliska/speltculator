@@ -27,7 +27,7 @@ export const MarketPrices = () => {
       if (reason === 'removeOption') return setSelectedMarketItems((currentlySelectedItems) => currentlySelectedItems.filter(({ name }) => name !== option.name));
 
       const currentPriceFetchUrl = `https://europe.albion-online-data.com/api/v2/stats/prices/${option.name}?locations=Caerleon,Lymhurst,Martlock,Bridgewatch,Thetford,FortSterling,BlackMarket`;
-
+      // T5_2H_SHAPESHIFTER_SET1
       const itemPrices: ItemPriceInformation[] = await fetch(currentPriceFetchUrl)
         .then((response) => response.json())
         .then((data: ItemPriceInformation[]) => getAveragePrice(data))
@@ -36,6 +36,8 @@ export const MarketPrices = () => {
 
           return [];
         });
+
+      console.log('itemPrices: ', itemPrices);
 
       const newlySelectedItem: SelectedItem = { ...option, prices: itemPrices };
 

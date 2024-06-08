@@ -16,7 +16,7 @@ export const allowItemQualityAtom = atom<boolean>({
 });
 
 export const itemTiersAtom = atom<ItemTier[]>({
-  default: [0, 1, 2, 3, 4],
+  default: [0],
   key: 'ItemTier',
 });
 
